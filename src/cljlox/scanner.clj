@@ -25,6 +25,8 @@
    \< :less
    \> :greater})
 
+(def whitespace #{\space \tab \return})
+
 ;; TODO: add error handling! Return a map with parsed tokens,
 ;; and encountered errors with line numbers, rather than the current
 ;; assumption of working only on valid code.
@@ -43,5 +45,7 @@
         ; possibly ambiguous one-character lexemes
         (ambig-unichar (first s))
         (recur (subs s 1) (conj tokens (ambig-unichar (first s))))
+        ; whitespace
+        (whitespace (first s)) (recur (subs s 1) tokens)
         ; the default case of not recognised!
         :else (recur (subs s 1) (conj tokens :unrecognised))))))
